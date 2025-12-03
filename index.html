@@ -1,156 +1,274 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Disposable Email - Classic</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <title>Cai's Email Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      font-family: "Times New Roman", serif;
-      background: #f2f2f2;
-      margin: 0;
+    :root {
+      --bg: #050711;
+      --card: #101322;
+      --accent: #1dd1a1;
+      --accent-soft: rgba(29, 209, 161, 0.12);
+      --text-main: #f5f5f5;
+      --text-muted: #a0a4b8;
     }
-    .header {
-      background: #003366;
-      color: #ffffff;
-      padding: 15px 20px;
-      border-bottom: 4px solid #002244;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 22px;
-    }
-    .wrapper {
-      max-width: 900px;
-      margin: 30px auto;
-      background: #ffffff;
-      border: 1px solid #cccccc;
-      padding: 25px 30px;
-    }
-    h2 {
-      margin-top: 0;
-      font-size: 20px;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 8px;
-    }
-    label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 5px;
-    }
-    input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #999999;
-      font-size: 14px;
+
+    * {
       box-sizing: border-box;
     }
-    .note {
-      font-size: 12px;
-      color: #666666;
-      margin-top: 5px;
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1c2036, #050711 65%);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 3rem 1rem;
     }
-    .buttons {
-      margin-top: 15px;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 2.3rem;
     }
-    .buttons button {
-      padding: 7px 15px;
-      margin-right: 8px;
-      font-size: 14px;
-      border: 1px solid #666;
-      background: #e6e6e6;
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #00d2ff, #3a7bd5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+      font-size: 18px;
+    }
+    .logo-text {
+      font-weight: 600;
+      font-size: 1.15rem;
+    }
+    .logo-text span {
+      color: var(--accent);
+    }
+
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: var(--card);
+      border-radius: 18px;
+      border: 2px dashed rgba(255, 255, 255, 0.14);
+      padding: 2rem 1.8rem 1.6rem;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .card h1 {
+      margin: 0 0 1.4rem;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #181b2b;
+      border-radius: 999px;
+      padding: 0.2rem 0.25rem 0.2rem 0.9rem;
+    }
+
+    #localPart {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-main);
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .domain-label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-right: 0.3rem;
+    }
+
+    .copy-btn {
+      border: none;
+      border-radius: 999px;
+      width: 40px;
+      height: 40px;
       cursor: pointer;
+      background: var(--accent);
+      color: #041016;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 6px 15px rgba(10, 200, 150, 0.55);
     }
-    .buttons button:hover {
-      background: #d4d4d4;
+
+    .actions {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
     }
+
+    .actions button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.55rem 1.4rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: #f5f5f5;
+      color: #222;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .actions button.refresh {
+      background: #ffffff;
+    }
+
+    .actions button.change {
+      background: #f0f1f8;
+    }
+
+    .actions button.delete {
+      background: #2c1b24;
+      color: #fda4af;
+    }
+
+    .helper {
+      margin-top: 1.4rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
     .status {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #333333;
-      min-height: 16px;
+      margin-top: 0.7rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--accent);
+      min-height: 1em;
     }
-    .footer {
-      margin-top: 25px;
-      font-size: 11px;
-      color: #777777;
-      border-top: 1px solid #ddd;
-      padding-top: 8px;
+
+    @media (max-width: 480px) {
+      body {
+        padding-top: 2rem;
+      }
+      .card {
+        padding: 1.5rem 1.2rem 1.3rem;
+      }
+      .card h1 {
+        font-size: 1.1rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <h1>Disposable Email Service</h1>
+  <div class="logo">
+    <div class="logo-icon">✉</div>
+    <div class="logo-text">Email <span>Generator</span></div>
   </div>
 
-  <div class="wrapper">
-    <h2>Email Generator</h2>
+  <section class="card">
+    <h1>Your Temp Email Address or Address Faker</h1>
 
-    <label for="emailInput">Email Address</label>
-    <input type="text" id="emailInput" readonly placeholder="Click &quot;Generate Random Email&quot; to begin">
-
-    <div class="note">
-      Any email sent to this address will be forwarded to your real inbox:
-      <strong>youremail@gmail.com</strong>.
+    <div class="input-wrap">
+      <input id="localPart" type="text" placeholder="landing" />
+      <span class="domain-label">@caiiro.shop</span>
+      <button class="copy-btn" id="copyBtn" title="Copy full address">
+        ⧉
+      </button>
     </div>
 
-    <div class="buttons">
-      <button id="copyBtn">Copy Email</button>
-      <button id="generateBtn">Generate Random Email</button>
-      <button id="getBtn">Get Email</button>
+    <div class="actions">
+      <button class="refresh" id="refreshBtn">↻ Refresh</button>
+      <button class="change" id="changeBtn">✎ Change</button>
+      <button class="delete" id="deleteBtn">🗑 Delete</button>
     </div>
 
-    <div id="status" class="status"></div>
-
-    <div class="footer">
-      This page is provided for personal verification purposes only.
+    <div class="helper">
+      Safeguard your inbox from spam and hacking. This temp mail gives you secure,
+      anonymous, disposable email addresses. Use them for signups and keep your
+      real mailbox clean.
     </div>
-  </div>
+
+    <div class="status" id="status"></div>
+  </section>
 
   <script>
-    const DOMAIN = "yourdomain.com"; // <-- change this
-    const emailInput = document.getElementById("emailInput");
+    const DOMAIN = "yourdomain.com"; // 🔧 change to caiiro.shop
+    const localInput = document.getElementById("localPart");
     const statusEl = document.getElementById("status");
 
-    function randomLocalPart(len = 10) {
-      const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-      let str = "";
-      for (let i = 0; i < len; i++) {
-        str += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return str;
+    function fullEmail() {
+      const local = (localInput.value || "").trim();
+      return local ? `${local}@${DOMAIN}` : "";
     }
 
-    document.getElementById("generateBtn").addEventListener("click", () => {
-      const local = randomLocalPart();
-      const email = `${local}@${DOMAIN}`;
-      emailInput.value = email;
-      statusEl.textContent = "New email generated. Use it on a website, then check your real inbox.";
+    function setStatus(msg) {
+      statusEl.textContent = msg;
+    }
+
+    function randomLocal(len = 10) {
+      const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+      let out = "";
+      for (let i = 0; i < len; i++) {
+        out += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return out;
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", () => {
+      localInput.value = randomLocal();
+      setStatus("New random temp address generated.");
+    });
+
+    document.getElementById("changeBtn").addEventListener("click", () => {
+      const current = localInput.value || "";
+      const custom = prompt("Enter custom name for your email address:", current);
+      if (custom === null) return; // user cancelled
+      const cleaned = custom.trim().replace(/\s+/g, "").toLowerCase();
+      if (!cleaned) {
+        setStatus("Custom address cannot be empty.");
+        return;
+      }
+      localInput.value = cleaned;
+      setStatus("Custom temp address set.");
+    });
+
+    document.getElementById("deleteBtn").addEventListener("click", () => {
+      localInput.value = "";
+      setStatus("Temp address cleared.");
     });
 
     document.getElementById("copyBtn").addEventListener("click", async () => {
-      if (!emailInput.value) {
-        statusEl.textContent = "Generate an email first.";
+      const email = fullEmail();
+      if (!email) {
+        setStatus("Generate or enter an address first.");
         return;
       }
       try {
-        await navigator.clipboard.writeText(emailInput.value);
-        statusEl.textContent = "Email copied to clipboard.";
-      } catch (e) {
-        statusEl.textContent = "Unable to copy automatically. Please copy manually.";
+        await navigator.clipboard.writeText(email);
+        setStatus(`Copied: ${email}`);
+      } catch (err) {
+        setStatus("Could not copy automatically, please copy manually.");
       }
     });
 
-    document.getElementById("getBtn").addEventListener("click", () => {
-      if (!emailInput.value) {
-        statusEl.textContent = "Generate an email first.";
-        return;
-      }
-      const url = "https://mail.google.com/mail/u/0/#search/" +
-                  encodeURIComponent(emailInput.value);
-      window.open(url, "_blank");
-    });
+    // Generate one by default on load
+    localInput.value = randomLocal();
+    setStatus("Temp address ready. Copy and use it on any website.");
   </script>
 </body>
 </html>
