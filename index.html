@@ -2,40 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Cai's Email Generator</title>
+  <title>Cai's Temp Email Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
       --bg: #050711;
       --card: #101322;
       --accent: #1dd1a1;
-      --accent-soft: rgba(29, 209, 161, 0.12);
       --text-main: #f5f5f5;
       --text-muted: #a0a4b8;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    *{box-sizing:border-box;}
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #1c2036, #050711 65%);
+      font-family: system-ui, sans-serif;
+      background: radial-gradient(circle at top, #1c2036, #050711 60%);
       color: var(--text-main);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding: 3rem 1rem;
+      padding: 2.5rem 1rem;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
-      margin-bottom: 2.3rem;
+      gap: 0.4rem;
+      margin-bottom: 2rem;
     }
     .logo-icon {
       width: 34px;
@@ -45,40 +41,38 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       font-size: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     }
     .logo-text {
       font-weight: 600;
       font-size: 1.15rem;
     }
-    .logo-text span {
-      color: var(--accent);
-    }
+    .logo-text span { color: var(--accent); }
 
     .card {
       width: 100%;
       max-width: 560px;
       background: var(--card);
       border-radius: 18px;
-      border: 2px dashed rgba(255, 255, 255, 0.14);
-      padding: 2rem 1.8rem 1.6rem;
-      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+      border: 2px dashed rgba(255,255,255,0.13);
+      padding: 2rem 1.8rem;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.6);
     }
 
     .card h1 {
       margin: 0 0 1.4rem;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       text-align: center;
     }
 
     .input-wrap {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
       background: #181b2b;
       border-radius: 999px;
-      padding: 0.2rem 0.25rem 0.2rem 0.9rem;
+      padding: 0.25rem 0.25rem 0.25rem 1rem;
+      gap: 0.5rem;
     }
 
     #localPart {
@@ -90,33 +84,32 @@
       outline: none;
     }
 
-    .domain-label {
+    .domain {
       font-size: 0.9rem;
       color: var(--text-muted);
-      margin-right: 0.3rem;
     }
 
-    .copy-btn {
+    #copyBtn {
       border: none;
       border-radius: 999px;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       cursor: pointer;
       background: var(--accent);
       color: #041016;
+      font-size: 1.2rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
-      box-shadow: 0 6px 15px rgba(10, 200, 150, 0.55);
+      box-shadow: 0 6px 15px rgba(10,200,150,0.4);
     }
 
     .actions {
       margin-top: 1.5rem;
       display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 0.7rem;
       justify-content: center;
+      flex-wrap: wrap;
     }
 
     .actions button {
@@ -127,148 +120,111 @@
       cursor: pointer;
       background: #f5f5f5;
       color: #222;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
     }
 
-    .actions button.refresh {
-      background: #ffffff;
-    }
-
-    .actions button.change {
-      background: #f0f1f8;
-    }
-
-    .actions button.delete {
-      background: #2c1b24;
-      color: #fda4af;
-    }
+    .delete { background: #3b1f27; color: #ffb3c1; }
 
     .helper {
-      margin-top: 1.4rem;
+      margin-top: 1.3rem;
+      text-align: center;
       font-size: 0.8rem;
       color: var(--text-muted);
-      text-align: center;
       line-height: 1.5;
     }
 
-    .status {
+    #status {
       margin-top: 0.7rem;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: var(--accent);
       min-height: 1em;
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding-top: 2rem;
-      }
-      .card {
-        padding: 1.5rem 1.2rem 1.3rem;
-      }
-      .card h1 {
-        font-size: 1.1rem;
-      }
     }
   </style>
 </head>
 <body>
+
   <div class="logo">
     <div class="logo-icon">✉</div>
     <div class="logo-text">Email <span>Generator</span></div>
   </div>
 
   <section class="card">
-    <h1>Your Temp Email Address or Address Faker</h1>
+    <h1>Cai's Email Generator</h1>
 
     <div class="input-wrap">
-      <input id="localPart" type="text" placeholder="landing" />
-      <span class="domain-label">@caiiro.shop</span>
-      <button class="copy-btn" id="copyBtn" title="Copy full address">
-        ⧉
-      </button>
+      <input id="localPart" type="text" placeholder="loading..." />
+      <span class="domain">@caiiro.shop</span>
+      <button id="copyBtn">⧉</button>
     </div>
 
     <div class="actions">
-      <button class="refresh" id="refreshBtn">↻ Refresh</button>
-      <button class="change" id="changeBtn">✎ Change</button>
-      <button class="delete" id="deleteBtn">🗑 Delete</button>
+      <button id="refreshBtn">Refresh</button>
+      <button id="changeBtn">Change</button>
+      <button id="deleteBtn" class="delete">Delete</button>
     </div>
 
     <div class="helper">
-      Safeguard your inbox from spam and hacking. This temp mail gives you secure,
-      anonymous, disposable email addresses. Use them for signups and keep your
-      real mailbox clean.
+      Secure, anonymous, disposable email addresses. Use for sign-ups & verification.
+      Keep your real inbox protected.
     </div>
 
-    <div class="status" id="status"></div>
+    <div id="status"></div>
   </section>
 
   <script>
-    const DOMAIN = "yourdomain.com"; // 🔧 change to caiiro.shop
+    const DOMAIN = "yourdomain.com"; // ← change to caiiro.shop
     const localInput = document.getElementById("localPart");
     const statusEl = document.getElementById("status");
 
     function fullEmail() {
-      const local = (localInput.value || "").trim();
-      return local ? `${local}@${DOMAIN}` : "";
+      return `${localInput.value}@${DOMAIN}`;
+    }
+
+    function randomString(len = 10) {
+      const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+      let out = "";
+      for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random()*chars.length)];
+      return out;
     }
 
     function setStatus(msg) {
       statusEl.textContent = msg;
     }
 
-    function randomLocal(len = 10) {
-      const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-      let out = "";
-      for (let i = 0; i < len; i++) {
-        out += chars[Math.floor(Math.random() * chars.length)];
+    document.getElementById("refreshBtn").onclick = () => {
+      localInput.value = randomString();
+      setStatus("New email generated.");
+    };
+
+    document.getElementById("changeBtn").onclick = () => {
+      const input = prompt("Enter a custom name:", localInput.value);
+      if (input) {
+        localInput.value = input.trim().toLowerCase().replace(/\s+/g, "");
+        setStatus("Custom email applied.");
       }
-      return out;
-    }
+    };
 
-    document.getElementById("refreshBtn").addEventListener("click", () => {
-      localInput.value = randomLocal();
-      setStatus("New random temp address generated.");
-    });
-
-    document.getElementById("changeBtn").addEventListener("click", () => {
-      const current = localInput.value || "";
-      const custom = prompt("Enter custom name for your email address:", current);
-      if (custom === null) return; // user cancelled
-      const cleaned = custom.trim().replace(/\s+/g, "").toLowerCase();
-      if (!cleaned) {
-        setStatus("Custom address cannot be empty.");
-        return;
-      }
-      localInput.value = cleaned;
-      setStatus("Custom temp address set.");
-    });
-
-    document.getElementById("deleteBtn").addEventListener("click", () => {
+    document.getElementById("deleteBtn").onclick = () => {
       localInput.value = "";
-      setStatus("Temp address cleared.");
-    });
+      setStatus("Cleared.");
+    };
 
-    document.getElementById("copyBtn").addEventListener("click", async () => {
+    document.getElementById("copyBtn").onclick = async () => {
       const email = fullEmail();
-      if (!email) {
-        setStatus("Generate or enter an address first.");
-        return;
-      }
       try {
         await navigator.clipboard.writeText(email);
-        setStatus(`Copied: ${email}`);
-      } catch (err) {
-        setStatus("Could not copy automatically, please copy manually.");
+        setStatus("Copied: " + email);
+      } catch {
+        localInput.select();
+        document.execCommand("copy");
+        setStatus("Copied (fallback): " + email);
       }
-    });
+    };
 
-    // Generate one by default on load
-    localInput.value = randomLocal();
-    setStatus("Temp address ready. Copy and use it on any website.");
+    // Auto-generate on load
+    localInput.value = randomString();
+    setStatus("Temp email ready.");
   </script>
+
 </body>
 </html>
