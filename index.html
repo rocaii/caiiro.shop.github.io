@@ -2,77 +2,146 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Cai's Temp Email Generator</title>
+  <title>Temp Email Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #050711;
-      --card: #101322;
-      --accent: #1dd1a1;
-      --text-main: #f5f5f5;
-      --text-muted: #a0a4b8;
+      --glass-bg: rgba(15, 23, 42, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.3);
+      --accent: #38f9d7;
+      --text-main: #ffffff;
+      --text-muted: #cbd5f5;
     }
 
-    *{box-sizing:border-box;}
+    * { box-sizing: border-box; }
+
+    /* 🔥 VIDEO BACKGROUND */
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -2;
+      object-fit: cover;
+      filter: brightness(0.45);
+    }
+
+    /* Dark overlay on top of the video */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.3), transparent 55%),
+                  linear-gradient(to bottom right, rgba(15, 23, 42, 0.85), rgba(3, 7, 18, 0.95));
+      z-index: -1;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: system-ui, sans-serif;
-      background: radial-gradient(circle at top, #1c2036, #050711 60%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
       color: var(--text-main);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2.5rem 1rem;
+      justify-content: flex-start;
+      padding: 2.4rem 1rem 2.6rem;
     }
 
+    /* LOGO / HEADER */
     .logo {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.55rem;
       margin-bottom: 2rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      backdrop-filter: blur(12px);
     }
     .logo-icon {
-      width: 34px;
-      height: 34px;
+      width: 30px;
+      height: 30px;
       border-radius: 12px;
-      background: linear-gradient(145deg, #00d2ff, #3a7bd5);
+      background: conic-gradient(from 160deg, #0ea5e9, #22c55e, #facc15, #0ea5e9);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+      font-size: 17px;
+      color: #020617;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.8);
     }
     .logo-text {
       font-weight: 600;
-      font-size: 1.15rem;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
     }
-    .logo-text span { color: var(--accent); }
+    .logo-text span {
+      color: var(--accent);
+    }
+    .logo-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      opacity: 0.9;
+    }
 
+    /* GLASS CARD */
     .card {
       width: 100%;
-      max-width: 560px;
-      background: var(--card);
-      border-radius: 18px;
-      border: 2px dashed rgba(255,255,255,0.13);
-      padding: 2rem 1.8rem;
-      box-shadow: 0 16px 50px rgba(0,0,0,0.6);
+      max-width: 600px;
+      background: var(--glass-bg);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      padding: 2rem 1.8rem 1.8rem;
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
+      box-shadow:
+        0 24px 70px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(148, 163, 184, 0.18);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.35), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.22), transparent 55%);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .card-inner {
+      position: relative;
+      z-index: 1;
     }
 
     .card h1 {
-      margin: 0 0 1.4rem;
-      font-size: 1.3rem;
+      margin: 0 0 1rem;
+      font-size: 1.25rem;
       text-align: center;
     }
+    .card-lead {
+      margin: 0 0 1.4rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
 
+    /* INPUT ROW */
     .input-wrap {
       display: flex;
       align-items: center;
-      background: #181b2b;
+      background: rgba(15, 23, 42, 0.9);
       border-radius: 999px;
-      padding: 0.25rem 0.25rem 0.25rem 1rem;
-      gap: 0.5rem;
+      padding: 0.3rem 0.3rem 0.3rem 0.9rem;
+      gap: 0.3rem; /* mas dikit na sila */
+      border: 1px solid rgba(148, 163, 184, 0.55);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.9);
     }
 
     #localPart {
@@ -80,150 +149,250 @@
       border: none;
       background: transparent;
       color: var(--text-main);
-      font-size: 1rem;
+      font-size: 0.98rem;
       outline: none;
+      min-width: 0;
+    }
+
+    #localPart::placeholder {
+      color: rgba(148, 163, 184, 0.9);
     }
 
     .domain {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--text-muted);
+      padding: 0 0.25rem;
+      border-radius: 6px;
+      background: rgba(15, 23, 42, 0.9);
     }
 
     #copyBtn {
       border: none;
       border-radius: 999px;
-      width: 42px;
-      height: 42px;
+      width: 40px;
+      height: 40px;
       cursor: pointer;
-      background: var(--accent);
-      color: #041016;
-      font-size: 1.2rem;
+      background: radial-gradient(circle at 30% 0%, #ecfeff, var(--accent));
+      color: #020617;
+      font-size: 1.15rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 15px rgba(10,200,150,0.4);
+      box-shadow:
+        0 12px 22px rgba(16, 185, 129, 0.4),
+        0 0 0 1px rgba(15, 23, 42, 0.4);
+      flex-shrink: 0;
     }
 
+    /* BUTTON ROW */
     .actions {
-      margin-top: 1.5rem;
+      margin-top: 1.4rem;
       display: flex;
-      gap: 0.7rem;
+      gap: 0.6rem;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .actions button {
-      border: none;
+      border: 1px solid rgba(148, 163, 184, 0.5);
       border-radius: 999px;
-      padding: 0.55rem 1.4rem;
-      font-size: 0.9rem;
+      padding: 0.5rem 1.4rem;
+      font-size: 0.88rem;
       cursor: pointer;
-      background: #f5f5f5;
-      color: #222;
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
     }
 
-    .delete { background: #3b1f27; color: #ffb3c1; }
+    .actions button:hover {
+      background: rgba(15, 23, 42, 0.98);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.9);
+    }
+
+    .delete {
+      border-color: rgba(248, 113, 113, 0.6);
+      color: #fecaca;
+      background: rgba(127, 29, 29, 0.5);
+    }
 
     .helper {
       margin-top: 1.3rem;
       text-align: center;
       font-size: 0.8rem;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     #status {
       margin-top: 0.7rem;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       color: var(--accent);
       min-height: 1em;
+    }
+
+    .status-error {
+      color: #fecaca;
+    }
+
+    /* 📱 Mobile tweaks */
+    @media (max-width: 600px) {
+      body {
+        padding: 2.1rem 0.9rem 2.4rem;
+      }
+      .logo {
+        margin-bottom: 1.6rem;
+        padding: 0.35rem 0.7rem;
+      }
+      .card {
+        padding: 1.7rem 1.3rem 1.6rem;
+        border-radius: 18px;
+      }
+      .card h1 {
+        font-size: 1.15rem;
+      }
+      .card-lead {
+        font-size: 0.85rem;
+      }
+      .input-wrap {
+        padding: 0.28rem 0.28rem 0.28rem 0.75rem;
+      }
+      #localPart {
+        font-size: 0.95rem;
+      }
+      .domain {
+        font-size: 0.82rem;
+      }
+      .actions button {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Video background -->
+  <video autoplay muted loop playsinline id="bgVideo">
+    <source src="mowie%20mowie%20-%20Made%20with%20Clipchamp%20(1).mp4" type="video/mp4">
+  </video>
+
+  <!-- Header / logo -->
   <div class="logo">
-    <div class="logo-icon">🐱</div>
-    <div class="logo-text">Cairo <span>Email Generator</span></div>
+    <div class="logo-icon">😼</div>
+    <div>
+      <div class="logo-text">Cairo <span>Email Generator</span></div>
+      <div class="logo-sub">Disposable inbox on caiiro.shop</div>
+    </div>
   </div>
 
+  <!-- Glassmorphism card -->
   <section class="card">
-    <h1>Enter Email Name</h1>
+    <div class="card-inner">
+      <h1>Temp Email Address mo beng</h1>
+      <p class="card-lead">
+        Generate a one-time address on <strong>caiiro.shop</strong>. Use it for signups
+        and verification while keeping your real inbox clean.
+      </p>
 
-    <div class="input-wrap">
-      <input id="localPart" type="text" placeholder="loading..." />
-      <span class="domain">@caiiro.shop</span>
-      <button id="copyBtn">⧉</button>
+      <div class="input-wrap">
+        <input id="localPart" type="text" placeholder="generating…" />
+        <span class="domain">@caiiro.shop</span>
+        <button id="copyBtn" title="Copy full address">⧉</button>
+      </div>
+
+      <div class="actions">
+        <button id="refreshBtn">↻ Refresh</button>
+        <button id="changeBtn">✎ Change</button>
+        <button id="deleteBtn" class="delete">🗑 Delete</button>
+      </div>
+
+      <div class="helper">
+        All messages sent to your temp address are forwarded to your private inbox via ImprovMX.
+        Do not use for high-value or long-term accounts.
+      </div>
+
+      <div id="status"></div>
     </div>
-
-    <div class="actions">
-      <button id="refreshBtn">Refresh</button>
-      <button id="changeBtn">Change</button>
-      <button id="deleteBtn" class="delete">Delete</button>
-    </div>
-
-    <div class="helper">
-      Secure, anonymous, disposable email addresses. Use for sign-ups & verification.
-      Keep your real inbox protected.
-    </div>
-
-    <div id="status"></div>
   </section>
 
   <script>
-    const DOMAIN = "caiiro.shop"; // ← change to caiiro.shop
-    const localInput = document.getElementById("localPart");
-    const statusEl = document.getElementById("status");
+    const DOMAIN = "caiiro.shop";
 
-    function fullEmail() {
-      return `${localInput.value}@${DOMAIN}`;
-    }
+    const localInput = document.getElementById("localPart");
+    const statusEl   = document.getElementById("status");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const changeBtn  = document.getElementById("changeBtn");
+    const deleteBtn  = document.getElementById("deleteBtn");
+    const copyBtn    = document.getElementById("copyBtn");
 
     function randomString(len = 10) {
       const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-      let out = "";
-      for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random()*chars.length)];
-      return out;
+      return Array.from({ length: len }, () =>
+        chars[Math.floor(Math.random() * chars.length)]
+      ).join("");
     }
 
-    function setStatus(msg) {
+    function fullEmail() {
+      const local = (localInput.value || "").trim();
+      return local ? `${local}@${DOMAIN}` : "";
+    }
+
+    function setStatus(msg, isError = false) {
       statusEl.textContent = msg;
+      statusEl.classList.toggle("status-error", isError);
     }
 
-    document.getElementById("refreshBtn").onclick = () => {
+    refreshBtn.onclick = () => {
       localInput.value = randomString();
-      setStatus("New email generated.");
+      setStatus("New random temp email generated.");
     };
 
-    document.getElementById("changeBtn").onclick = () => {
-      const input = prompt("Enter a custom name:", localInput.value);
-      if (input) {
-        localInput.value = input.trim().toLowerCase().replace(/\s+/g, "");
-        setStatus("Custom email applied.");
+    changeBtn.onclick = () => {
+      const current = localInput.value;
+      const input = prompt("Enter a custom name for your email:", current);
+      if (input === null) return;
+      const cleaned = input.trim().toLowerCase().replace(/\s+/g, "");
+      if (!cleaned) {
+        setStatus("Custom name cannot be empty.", true);
+        return;
       }
+      localInput.value = cleaned;
+      setStatus("Custom temp email set.");
     };
 
-    document.getElementById("deleteBtn").onclick = () => {
+    deleteBtn.onclick = () => {
       localInput.value = "";
-      setStatus("Cleared.");
+      setStatus("Temp address cleared.");
     };
 
-    document.getElementById("copyBtn").onclick = async () => {
+    copyBtn.onclick = async () => {
       const email = fullEmail();
+      if (!email) {
+        setStatus("Generate or enter an address first.", true);
+        return;
+      }
       try {
+        // ✅ Copies the FULL address (local part + @caiiro.shop)
         await navigator.clipboard.writeText(email);
         setStatus("Copied: " + email);
       } catch {
-        localInput.select();
-        document.execCommand("copy");
-        setStatus("Copied (fallback): " + email);
+        // No more 'fallback' text, just a clean error
+        setStatus("Unable to copy automatically. Long-press and copy.", true);
       }
     };
 
-    // Auto-generate on load
-    localInput.value = randomString();
-    setStatus("Temp email ready.");
+    // Generate an address on load
+    window.addEventListener("DOMContentLoaded", () => {
+      localInput.value = randomString();
+      setStatus("Temp email ready. Tap the icon to copy.");
+    });
   </script>
 
 </body>
