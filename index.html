@@ -294,11 +294,13 @@
         <button id="refreshBtn">↻ Refresh</button>
         <button id="changeBtn">✎ Change</button>
         <button id="deleteBtn" class="delete">🗑 Delete</button>
+        <!-- 🆕 CHECK INBOX BUTTON -->
+        <button id="inboxBtn">📥 Check Inbox</button>
       </div>
 
       <div class="helper">
         All messages sent to your temp address are forwarded to your private inbox via ImprovMX.<br>
-        Do not use for high-value or long-term accounts.
+        Tap <strong>Check Inbox</strong> to open Gmail filtered for this temp email.
       </div>
 
       <div id="status"></div>
@@ -314,6 +316,7 @@
     const changeBtn  = document.getElementById("changeBtn");
     const deleteBtn  = document.getElementById("deleteBtn");
     const copyBtn    = document.getElementById("copyBtn");
+    const inboxBtn   = document.getElementById("inboxBtn");
 
     function randomString(len = 10) {
       const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -369,10 +372,23 @@
       }
     };
 
+    // 🆕 OPEN GMAIL SEARCH FOR THIS ADDRESS
+    inboxBtn.onclick = () => {
+      const email = fullEmail();
+      if (!email) {
+        setStatus("Generate or enter an address first.", true);
+        return;
+      }
+      // Gmail search URL (user must be logged in to the ImprovMX-forwarding Gmail)
+      const url = "https://mail.google.com/mail/u/0/#search/" + encodeURIComponent(email);
+      window.open(url, "_blank");
+      setStatus("Opening Gmail inbox for: " + email);
+    };
+
     // Generate an address on load
     window.addEventListener("DOMContentLoaded", () => {
       localInput.value = randomString();
-      setStatus("Temp email ready. Tap the icon to copy.");
+      setStatus("Temp email ready. Tap the icon to copy or Check Inbox after using it.");
     });
   </script>
 
