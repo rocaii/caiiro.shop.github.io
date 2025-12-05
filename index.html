@@ -1,718 +1,460 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Cairo Email Generator – caiiro.shop</title>
+  <meta charset="utf-8" />
+  <title>Temp Email Generator – caiiro.shop</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
-      --bg: #050816;
-      --bg-soft: #0b1020;
-      --bg-softer: #12172a;
-      --accent: #6366f1;
-      --accent-soft: rgba(99, 102, 241, 0.15);
-      --accent-strong: #4f46e5;
-      --text: #f9fafb;
-      --text-muted: #9ca3af;
-      --border: #1f2937;
-      --danger: #ef4444;
-      --success: #22c55e;
-      --radius-lg: 18px;
-      --radius-xl: 24px;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.6);
+      --glass-bg: rgba(15, 23, 42, 0.35);
+      --glass-border: rgba(255, 255, 255, 0.28);
+      --accent: #38f9d7;
+      --text-main: #ffffff;
+      --text-muted: #cbd5f5;
     }
 
-    * {
-      box-sizing: border-box;
+    * { box-sizing: border-box; }
+
+    /* 🔥 VIDEO BACKGROUND – also used on mobile */
+    #bgVideo {
+      position: fixed;
+      inset: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      /* mas malinaw at colorful */
+      filter: brightness(0.9) contrast(1.1) saturate(1.2);
+    }
+
+    /* Light overlay so text stays readable, pero kita pa rin yung video */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        to bottom right,
+        rgba(0, 0, 0, 0.12),
+        rgba(0, 0, 0, 0.3)
+      );
+      z-index: -1;
     }
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #111827 0, #020617 50%, #000 100%);
-      color: var(--text);
       min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      color: var(--text-main);
       display: flex;
-      justify-content: center;
-    }
-
-    .page {
-      width: 100%;
-      max-width: 960px;
-      padding: 24px 16px 40px;
-    }
-
-    header {
-      margin-bottom: 24px;
-    }
-
-    .badge {
-      display: inline-flex;
+      flex-direction: column;
       align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      padding: 4px 10px;
+      justify-content: flex-start;
+      padding: 2.4rem 1rem 2.6rem;
+    }
+
+    /* LOGO / HEADER */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 1.8rem;
+      padding: 0.45rem 0.9rem;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+    }
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: conic-gradient(from 160deg, #0ea5e9, #22c55e, #facc15, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      color: #020617;
+    }
+    .logo-text {
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+    }
+    .logo-text span { color: var(--accent); }
+    .logo-sub {
+      font-size: 0.68rem;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      opacity: 0.9;
     }
 
-    .badge-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.35);
-    }
-
-    .headline {
-      font-size: clamp(26px, 4vw, 32px);
-      font-weight: 650;
-      letter-spacing: -0.03em;
-      margin: 0 0 6px;
-    }
-
-    .headline span {
-      background: linear-gradient(120deg, #a855f7, #6366f1, #22c55e);
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .subhead {
-      margin: 0;
-      font-size: 14px;
-      color: var(--text-muted);
-      max-width: 520px;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-      gap: 18px;
-      margin-top: 22px;
-    }
-
-    @media (max-width: 768px) {
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
+    /* GLASS CARD */
     .card {
-      background: radial-gradient(circle at top left, #111827 0, #020617 60%);
-      border-radius: var(--radius-xl);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      box-shadow: var(--shadow-soft);
-      padding: 18px 16px 16px;
+      width: 100%;
+      max-width: 620px;
+      background: rgba(15, 23, 42, 0.30);
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 1.9rem 1.8rem 1.65rem;
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      box-shadow: 0 12px 50px rgba(0, 0, 0, 0.35);
       position: relative;
       overflow: hidden;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
-
     .card::before {
       content: "";
       position: absolute;
       inset: -40%;
       background:
-        radial-gradient(circle at 0 0, rgba(168, 85, 247, 0.05), transparent 60%),
-        radial-gradient(circle at 100% 0, rgba(56, 189, 248, 0.06), transparent 58%),
-        radial-gradient(circle at 0 100%, rgba(34, 197, 94, 0.05), transparent 55%);
-      z-index: -1;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      gap: 8px;
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(55, 65, 81, 0.8);
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--success);
-      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
-    }
-
-    .pill-text-strong {
-      color: #e5e7eb;
-      font-weight: 500;
-    }
-
-    .email-box {
-      margin: 8px 0 12px;
-      padding: 10px 10px;
-      background: rgba(15, 23, 42, 0.95);
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(75, 85, 99, 0.9);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .email-local {
-      flex: 1;
-      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 14px;
-      color: #e5e7eb;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .email-domain {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .chip {
-      display: inline-flex;
-      padding: 2px 6px;
-      border-radius: 999px;
-      font-size: 11px;
-      background: var(--accent-soft);
-      color: #c7d2fe;
-      border: 1px solid rgba(129, 140, 248, 0.6);
-    }
-
-    .btn {
-      border: 0;
-      outline: 0;
-      cursor: pointer;
-      border-radius: 999px;
-      font-size: 12px;
-      padding: 6px 11px;
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(31, 41, 55, 0.9);
-      color: #e5e7eb;
-      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.12s ease;
-      box-shadow: 0 0 0 1px rgba(55, 65, 81, 0.9);
-    }
-
-    .btn:hover {
-      background: rgba(55, 65, 81, 1);
-      transform: translateY(-0.5px);
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.8);
-    }
-
-    .btn:active {
-      transform: translateY(0.5px) scale(0.99);
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.7);
-    }
-
-    .btn-primary {
-      background: radial-gradient(circle at 0 0, #22c55e 0, #16a34a 30%, #15803d 70%);
-      color: #ecfdf5;
-      box-shadow: 0 0 0 1px rgba(22, 163, 74, 0.9), 0 12px 30px rgba(21, 128, 61, 0.9);
-    }
-
-    .btn-primary:hover {
-      background: radial-gradient(circle at 0 0, #4ade80 0, #22c55e 40%, #16a34a 75%);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--text-muted);
-      box-shadow: 0 0 0 1px rgba(55, 65, 81, 0.8);
-    }
-
-    .btn-small {
-      font-size: 11px;
-      padding: 5px 10px;
-    }
-
-    .btn-danger {
-      background: rgba(239, 68, 68, 0.1);
-      color: #fecaca;
-      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.7);
-    }
-
-    .btn-danger:hover {
-      background: rgba(239, 68, 68, 0.15);
-    }
-
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-
-    .small-label {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .small-label span {
-      color: #e5e7eb;
-      font-weight: 500;
-    }
-
-    .muted {
-      color: var(--text-muted);
-    }
-
-    .inline-link {
-      color: #a5b4fc;
-      text-decoration: none;
-      border-bottom: 1px dashed rgba(165, 180, 252, 0.7);
-    }
-
-    .inline-link:hover {
-      border-bottom-style: solid;
-    }
-
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-    }
-
-    /* Right column sections */
-    .side-card {
-      background: rgba(15, 23, 42, 0.95);
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      padding: 12px 12px 10px;
-      margin-bottom: 10px;
-    }
-
-    .side-title {
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .side-list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .side-list li {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 4px;
-      align-items: flex-start;
-    }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      margin-top: 5px;
-      background: rgba(148, 163, 184, 0.9);
-    }
-
-    .history-list {
-      list-style: none;
-      margin: 4px 0 0;
-      padding: 0;
-      font-size: 12px;
-    }
-
-    .history-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 0;
-      border-bottom: 1px dashed rgba(31, 41, 55, 0.9);
-    }
-
-    .history-email {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-      color: #e5e7eb;
-      max-width: 180px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .history-meta {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .faq {
-      margin-top: 22px;
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      background: rgba(15, 23, 42, 0.85);
-      padding: 10px 12px;
-    }
-
-    .faq-title {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    details {
-      border-radius: 12px;
-      padding: 4px 6px;
-      margin-bottom: 2px;
-    }
-
-    details[open] {
-      background: rgba(17, 24, 39, 0.9);
-    }
-
-    summary {
-      font-size: 12px;
-      cursor: pointer;
-      list-style: none;
-      color: var(--text-muted);
-    }
-
-    summary::-webkit-details-marker {
-      display: none;
-    }
-
-    summary::before {
-      content: "▸";
-      display: inline-block;
-      margin-right: 6px;
-      transition: transform 0.12s ease;
-      color: var(--accent);
-    }
-
-    details[open] summary::before {
-      transform: rotate(90deg);
-    }
-
-    details p {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin: 4px 0 2px;
-    }
-
-    footer {
-      margin-top: 22px;
-      font-size: 11px;
-      color: var(--text-muted);
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    footer a {
-      color: #9ca3af;
-      text-decoration: none;
-      border-bottom: 1px dashed rgba(156, 163, 175, 0.6);
-    }
-
-    footer a:hover {
-      border-bottom-style: solid;
-    }
-
-    .toast {
-      position: fixed;
-      bottom: 18px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.96);
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      color: #e5e7eb;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.95);
-      opacity: 0;
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.35), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.22), transparent 55%);
+      opacity: 0.25;
       pointer-events: none;
-      transition: opacity 0.16s ease, transform 0.16s ease;
-      z-index: 50;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 70px rgba(0, 0, 0, 0.45);
+    }
+    .card-inner {
+      position: relative;
+      z-index: 1;
     }
 
-    .toast-icon {
-      width: 14px;
-      height: 14px;
-      border-radius: 999px;
-      background: rgba(34, 197, 94, 0.1);
+    .card h1 {
+      margin: 0 0 1rem;
+      font-size: 1.25rem;
+      text-align: center;
+      letter-spacing: 0.01em;
+    }
+    .card-lead {
+      margin: 0 0 1.4rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* INPUT ROW – local + domain close together */
+    .input-wrap {
       display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 999px;
+      padding: 0.33rem 0.4rem 0.33rem 0.9rem;
+      gap: 0.3rem;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .input-wrap:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(56, 249, 215, 0.6);
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    #localPart {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-main);
+      font-size: 0.98rem;
+      outline: none;
+      min-width: 0;
+    }
+
+    #localPart::placeholder {
+      color: rgba(209, 213, 219, 0.9);
+    }
+
+    .domain {
+      font-size: 0.9rem;
+      color: #d1d5db;
+      padding: 0 0.35rem;
+      border-radius: 6px;
+      background: transparent;
+      white-space: nowrap;
+    }
+
+    /* COPY BUTTON */
+    #copyBtn {
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      cursor: pointer;
+      background: radial-gradient(circle at 20% 0%, #ffffff, var(--accent));
+      box-shadow: 0 8px 20px rgba(56, 249, 215, 0.4);
+      color: #020617;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
-      color: #4ade80;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+    }
+    #copyBtn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(56, 249, 215, 0.55);
+      filter: brightness(1.05);
+    }
+    #copyBtn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 16px rgba(56, 249, 215, 0.4);
+      filter: brightness(0.97);
     }
 
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+    /* BUTTON ROW */
+    .actions {
+      margin-top: 1.4rem;
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .actions button {
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      padding: 0.5rem 1.4rem;
+      font-size: 0.88rem;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .actions button:hover {
+      background: rgba(0, 0, 0, 0.45);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+    }
+
+    .actions button:active {
+      transform: translateY(0);
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    .delete {
+      background: rgba(239, 68, 68, 0.35);
+      border-color: rgba(239, 68, 68, 0.7);
+      color: #fee2e2;
+    }
+    .delete:hover {
+      background: rgba(239, 68, 68, 0.5);
+    }
+
+    .helper {
+      margin-top: 1.3rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    #status {
+      margin-top: 0.7rem;
+      text-align: center;
+      font-size: 0.83rem;
+      color: var(--accent);
+      min-height: 1em;
+    }
+
+    .status-error { color: #fecaca; }
+
+    /* Focus styles for accessibility */
+    input:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* 📱 MOBILE: tighter, buttons full width */
+    @media (max-width: 600px) {
+      body {
+        padding: 2.1rem 0.9rem 2.4rem;
+      }
+      .logo {
+        margin-bottom: 1.6rem;
+        padding: 0.35rem 0.7rem;
+      }
+      .card {
+        padding: 1.7rem 1.3rem 1.6rem;
+        border-radius: 18px;
+      }
+      .card h1 {
+        font-size: 1.15rem;
+      }
+      .card-lead {
+        font-size: 0.85rem;
+      }
+      .input-wrap {
+        padding: 0.3rem 0.35rem 0.3rem 0.8rem;
+      }
+      #localPart {
+        font-size: 0.95rem;
+      }
+      .domain {
+        font-size: 0.84rem;
+      }
+      .actions button {
+        width: 100%;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <div class="badge">
-        <span class="badge-dot"></span>
-        <span>Disposable Inbox on <strong>caiiro.shop</strong></span>
-      </div>
-      <h1 class="headline">
-        Custom Email <span>by Cairo</span>
-      </h1>
-      <p class="subhead">
-        Generate a one-time address on <strong>caiiro.shop</strong>. Perfect for signups and verification while keeping your real inbox clean and private.
+
+  <!-- 🔥 VIDEO BACKGROUND (works on desktop + mobile) -->
+  <video autoplay muted loop playsinline webkit-playsinline id="bgVideo">
+    <source src="mowie%20mowie%20-%20Made%20with%20Clipchamp%20(1).mp4" type="video/mp4">
+  </video>
+
+  <!-- Header / logo -->
+  <div class="logo">
+    <div class="logo-icon">😼</div>
+    <div>
+      <div class="logo-text">Cairo <span>Email Generator</span></div>
+      <div class="logo-sub">Disposable inbox on caiiro.shop</div>
+    </div>
+  </div>
+
+  <!-- Glassmorphism card -->
+  <section class="card">
+    <div class="card-inner">
+      <h1>Temp Email Address mo, beng</h1>
+      <p class="card-lead">
+        Generate a one-time address on <strong>caiiro.shop</strong>. Use it for signups
+        and verification while keeping your real inbox clean.
       </p>
-    </header>
 
-    <section class="layout">
-      <!-- Left: main generator card -->
-      <article class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <span>🎯 Cairo Email Generator</span>
-          </div>
-          <div class="status-pill">
-            <span class="status-dot"></span>
-            <span class="pill-text-strong">Forwarding active</span>
-          </div>
-        </div>
+      <div class="input-wrap">
+        <input
+          id="localPart"
+          type="text"
+          placeholder="generating…"
+          maxlength="32"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <span class="domain">@caiiro.shop</span>
+        <button id="copyBtn" title="Copy full address" aria-label="Copy email address">⧉</button>
+      </div>
 
-        <div class="small-label">
-          Your temp email
-          <span id="forward-target-label">→ forwarded to your private inbox</span>
-        </div>
+      <div class="actions">
+        <button id="refreshBtn" type="button">↻ Refresh</button>
+        <button id="changeBtn" type="button">✎ Change</button>
+        <button id="deleteBtn" class="delete" type="button">🗑 Delete</button>
+        <!-- 🆕 CHECK INBOX BUTTON -->
+        <button id="inboxBtn" type="button">📥 Check Inbox</button>
+      </div>
 
-        <div class="email-box">
-          <span class="chip">temp address</span>
-          <span id="temp-email" class="email-local">randomname123</span>
-          <span class="email-domain">@caiiro.shop</span>
-          <button id="copy-btn" class="btn btn-small btn-ghost" type="button">
-            📋 Copy
-          </button>
-        </div>
+      <div class="helper">
+        All messages sent to your temp address are forwarded to your private inbox via ImprovMX.<br>
+        Tap <strong>Check Inbox</strong> to open Gmail filtered for this temp email.
+      </div>
 
-        <div class="card-footer">
-          <div class="btn-row">
-            <button id="refresh-btn" class="btn btn-primary btn-small" type="button">
-              ↻ Refresh
-            </button>
-            <button id="change-btn" class="btn btn-small" type="button">
-              ✎ Change local part
-            </button>
-            <button id="delete-btn" class="btn btn-small btn-danger" type="button">
-              🗑 Delete
-            </button>
-            <button id="inbox-btn" class="btn btn-small" type="button">
-              📬 Check Inbox
-            </button>
-          </div>
-          <div class="small-label muted">
-            All messages sent to this temp address are
-            <span>forwarded via ImprovMX</span>.
-          </div>
-        </div>
-      </article>
-
-      <!-- Right: tips + history -->
-      <aside>
-        <div class="side-card">
-          <div class="side-title">Why use caiiro.shop?</div>
-          <ul class="side-list">
-            <li>
-              <span class="dot"></span>
-              <span>Keep your main email safe from spam & promos.</span>
-            </li>
-            <li>
-              <span class="dot"></span>
-              <span>Perfect for testing signups & verification flows.</span>
-            </li>
-            <li>
-              <span class="dot"></span>
-              <span>Powered by <strong>ImprovMX</strong> forwarding.</span>
-            </li>
-          </ul>
-        </div>
-
-        <div class="side-card">
-          <div class="side-title">Recently generated</div>
-          <ul id="history-list" class="history-list">
-            <!-- Sample static items; you can replace with real history -->
-            <li class="history-item">
-              <span class="history-email">testshop@caiiro.shop</span>
-              <span class="history-meta">3 min ago</span>
-            </li>
-            <li class="history-item">
-              <span class="history-email">promo-checker@caiiro.shop</span>
-              <span class="history-meta">15 min ago</span>
-            </li>
-          </ul>
-        </div>
-      </aside>
-    </section>
-
-    <!-- FAQ section -->
-    <section class="faq">
-      <div class="faq-title">FAQ & quick notes</div>
-      <details>
-        <summary>Gaano katagal active ang temp email ko?</summary>
-        <p>
-          Depende ito sa configuration mo sa backend (ImprovMX / server side).
-          You can add your own policy here (e.g. “temporary addresses may be
-          cleaned up after X days of inactivity”).
-        </p>
-      </details>
-      <details>
-        <summary>Safe ba gamitin for verification sa socials / apps?</summary>
-        <p>
-          Temp emails are great for testing and low-risk signups, pero tandaan
-          na bawat platform may sariling rules. We can’t guarantee na hindi sila
-          magfa-flag ng account based on usage patterns.
-        </p>
-      </details>
-      <details>
-        <summary>Can I change where the emails are forwarded?</summary>
-        <p>
-          Yes, sa actual configuration mo via <a class="inline-link" href="https://improvmx.com" target="_blank" rel="noopener noreferrer">ImprovMX</a> / DNS records. This page is the front-end only; forwarding target is handled by your mail setup.
-        </p>
-      </details>
-    </section>
-
-    <footer>
-      <span>© <span id="year"></span> caiiro.shop · Temp email forwarding with love.</span>
-      <span>
-        Need custom domains? DM us or visit
-        <a href="https://caiiro.shop" target="_blank" rel="noopener noreferrer">caiiro.shop</a>
-      </span>
-    </footer>
-  </div>
-
-  <!-- Toast -->
-  <div id="toast" class="toast" role="status" aria-live="polite">
-    <div class="toast-icon">✓</div>
-    <span id="toast-message">Copied!</span>
-  </div>
+      <div id="status" aria-live="polite"></div>
+    </div>
+  </section>
 
   <script>
-    const tempEmailEl = document.getElementById("temp-email");
-    const copyBtn = document.getElementById("copy-btn");
-    const refreshBtn = document.getElementById("refresh-btn");
-    const changeBtn = document.getElementById("change-btn");
-    const deleteBtn = document.getElementById("delete-btn");
-    const inboxBtn = document.getElementById("inbox-btn");
-    const toastEl = document.getElementById("toast");
-    const toastMsg = document.getElementById("toast-message");
-    const yearEl = document.getElementById("year");
+    const DOMAIN = "caiiro.shop";
 
-    yearEl.textContent = new Date().getFullYear();
+    const localInput = document.getElementById("localPart");
+    const statusEl   = document.getElementById("status");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const changeBtn  = document.getElementById("changeBtn");
+    const deleteBtn  = document.getElementById("deleteBtn");
+    const copyBtn    = document.getElementById("copyBtn");
+    const inboxBtn   = document.getElementById("inboxBtn");
 
-    function showToast(message) {
-      toastMsg.textContent = message;
-      toastEl.classList.add("show");
-      setTimeout(() => {
-        toastEl.classList.remove("show");
-      }, 2000);
+    function randomString(len = 10) {
+      const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+      return Array.from({ length: len }, () =>
+        chars[Math.floor(Math.random() * chars.length)]
+      ).join("");
     }
 
-    copyBtn.addEventListener("click", () => {
-      const email = (tempEmailEl.textContent || "").trim();
-      if (!email) return;
+    function fullEmail() {
+      const local = (localInput.value || "").trim();
+      return local ? `${local}@${DOMAIN}` : "";
+    }
 
-      const fullEmail = email + "@caiiro.shop";
+    function setStatus(msg, isError = false) {
+      statusEl.textContent = msg;
+      statusEl.classList.toggle("status-error", isError);
+    }
 
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard
-          .writeText(fullEmail)
-          .then(() => showToast("Copied: " + fullEmail))
-          .catch(() => showToast("Failed to copy. 😔"));
-      } else {
-        // Fallback for older browsers
-        const input = document.createElement("input");
-        input.value = fullEmail;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand("copy");
-        document.body.removeChild(input);
-        showToast("Copied: " + fullEmail);
-      }
-    });
+    refreshBtn.onclick = () => {
+      localInput.value = randomString();
+      setStatus("New random temp email generated.");
+    };
 
-    // NOTE: The functions below are placeholders.
-    // Dito mo iko-connect yung real backend mo (API calls, page reload, etc.)
+    changeBtn.onclick = () => {
+      const current = localInput.value;
+      const input = prompt("Enter a custom name for your email:", current);
+      if (input === null) return;
 
-    refreshBtn.addEventListener("click", () => {
-      // Example only: generate a simple random local-part
-      const randomLocal =
-        "user" + Math.floor(Math.random() * 9999).toString().padStart(4, "0");
-      tempEmailEl.textContent = randomLocal;
-      showToast("New temp email generated");
-      // TODO: Call your backend to actually create / switch the address.
-    });
+      // allow only safe characters for the local-part
+      const cleaned = input
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9._-]/g, "");
 
-    changeBtn.addEventListener("click", () => {
-      const current = (tempEmailEl.textContent || "").trim();
-      const next = prompt("Enter new local part (before @caiiro.shop):", current);
-      if (!next) return;
-      // Basic sanitize: trim spaces
-      const cleaned = next.replace(/\s+/g, "").toLowerCase();
-      if (!cleaned) return;
-      tempEmailEl.textContent = cleaned;
-      showToast("Local part updated");
-      // TODO: Send the new local part to your backend to update the address.
-    });
-
-    deleteBtn.addEventListener("click", () => {
-      const ok = confirm(
-        "Delete this temp address? Any new mail sent to it may no longer be forwarded."
-      );
-      if (!ok) return;
-      // Front-end only: clear text
-      tempEmailEl.textContent = "deleted";
-      showToast("Temp address deleted");
-      // TODO: Call your backend to actually delete / disable forwarding.
-    });
-
-    inboxBtn.addEventListener("click", () => {
-      const local = (tempEmailEl.textContent || "").trim();
-      if (!local || local === "deleted") {
-        showToast("No active temp email.");
+      if (!cleaned) {
+        setStatus("Custom name cannot be empty or invalid.", true);
         return;
       }
-      const fullEmail = encodeURIComponent(local + "@caiiro.shop");
-      // Simple example: open Gmail search pre-filtered for this address
-      const gmailUrl =
-        "https://mail.google.com/mail/u/0/#search/" + fullEmail;
-      window.open(gmailUrl, "_blank", "noopener");
+
+      localInput.value = cleaned;
+      setStatus("Custom temp email set.");
+    };
+
+    deleteBtn.onclick = () => {
+      localInput.value = "";
+      setStatus("Temp address cleared.");
+    };
+
+    copyBtn.onclick = async () => {
+      const email = fullEmail();
+      if (!email) {
+        setStatus("Generate or enter an address first.", true);
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(email);
+        setStatus("Copied: " + email);
+      } catch {
+        setStatus("Unable to copy automatically. Long-press then copy.", true);
+      }
+    };
+
+    // 🆕 OPEN GMAIL SEARCH FOR THIS ADDRESS
+    inboxBtn.onclick = () => {
+      const email = fullEmail();
+      if (!email) {
+        setStatus("Generate or enter an address first.", true);
+        return;
+      }
+      // Gmail search URL (user must be logged in to the ImprovMX-forwarding Gmail)
+      const url = "https://mail.google.com/mail/u/0/#search/" + encodeURIComponent(email);
+      window.open(url, "_blank");
+      setStatus("Opening Gmail inbox for: " + email);
+    };
+
+    // Generate an address on load
+    window.addEventListener("DOMContentLoaded", () => {
+      localInput.value = randomString();
+      setStatus("Temp email ready. Tap the icon to copy or Check Inbox after using it.");
     });
   </script>
+
 </body>
 </html>
